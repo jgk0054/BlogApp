@@ -64,7 +64,7 @@ const PostEditor = () => {
                 response = await axios.put(`${API_URL}/blogs/${id}`, { title, blocks }, { headers });
             } else {
                 // Create new post
-                response = await axios.post('/blogs', { title, blocks }, { headers });
+                response = await axios.post(`${API_URL}/blogs`, { title, blocks }, { headers });
             }
 
             if (response.status === 200 || response.status === 201) {
