@@ -1,29 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { loginUser } from '../../actions/authActions';
+import { loginUser } from '../../actions/authActions'; // Adjust the import path as needed
 
 const LoginComponent = (props) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+
     useEffect(() => {
         if (props.isAuthenticated) {
             setTimeout(() => {
                 navigate('/');
             }, 2000);
+        } else if (props.authError) {
+            setError('Failed to login. Please try again.');
         }
-    }, [props.isAuthenticated, navigate]);
+    }, [props.isAuthenticated, props.authError, navigate]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        setError(null); // Clear any previous error
         props.loginUser(username, password);
-
-        if (!props.isAuthenticated) {
-            setError('Failed to login. Please try again.');
-        }
     };
 
     return (
@@ -44,10 +43,11 @@ const LoginComponent = (props) => {
             </form>
         </div>
     );
-}
+};
 
 const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
+    isAuthenticated: state.auth.isAuthenticated,
+    authError: state.auth.error // Assuming you have an error field in your auth reducer
 });
 
 const mapDispatchToProps = {

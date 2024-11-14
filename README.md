@@ -30,7 +30,7 @@
 - **Purpose**: Displays a list of blog posts.
 - **Features**:
   - Fetches posts from the backend upon component mount.
-  - Uses Material-UI for a grid-based layout of blog posts.
+  - Uses Material-UI for a Grid2-based layout of blog posts.
 
 ### BlogPost.js
 - **Purpose**: Displays details of a single blog post.

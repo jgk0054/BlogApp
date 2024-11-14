@@ -9,6 +9,7 @@ const Navbar = () => {
     const userData = useSelector(state => state.auth.user);
     const dispatch = useDispatch();
     const [anchorEl, setAnchorEl] = React.useState(null);
+
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -19,6 +20,7 @@ const Navbar = () => {
 
     const handleLogout = () => {
         dispatch(logoutUser());
+        handleClose();
     };
 
     return (
@@ -32,35 +34,33 @@ const Navbar = () => {
                         <Button color="inherit">
                             <Link to="/create" style={{ textDecoration: 'none', color: 'inherit' }}>Create Post</Link>
                         </Button>
-
-                        <Typography variant="body1" style={{ marginRight: 10 }}>{userData.user.username}</Typography>  {/* Displaying the username */}
-                        <Avatar alt="User Avatar" src={userData.user.avatar_url} onClick={handleClick} style={{ cursor: 'pointer' }} />
-                        <Menu
-                            anchorEl={anchorEl}
-                            keepMounted
-                            open={Boolean(anchorEl)}
-                            onClose={handleClose}
-                        >
-                            <MenuItem onClick={handleClose}>
-                                <Link to="/profile" style={{ textDecoration: 'none', color: 'inherit' }}>Profile</Link>
-                            </MenuItem>
-                            <MenuItem onClick={handleClose}>Settings</MenuItem>
-                            <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                        </Menu>
+                        {userData && (
+                            <>
+                                <Button color="inherit" onClick={handleClick}>
+                                    <Avatar alt={userData.author_name} src={userData.avatar_url} />
+                                </Button>
+                                <Menu
+                                    anchorEl={anchorEl}
+                                    keepMounted
+                                    open={Boolean(anchorEl)}
+                                    onClose={handleClose}
+                                >
+                                    <MenuItem onClick={handleClose}>
+                                        <Typography variant="body1">{userData.author_name}</Typography>
+                                    </MenuItem>
+                                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                                </Menu>
+                            </>
+                        )}
                     </>
                 ) : (
-                    <>
-                        <Button color="inherit">
-                            <Link to="/login" style={{ textDecoration: 'none', color: 'inherit' }}>Login</Link>
-                        </Button>
-                        <Button color="inherit">
-                            <Link to="/register" style={{ textDecoration: 'none', color: 'inherit' }}>Register</Link>
-                        </Button>
-                    </>
+                    <Button color="inherit">
+                        <Link to="/login" style={{ textDecoration: 'none', color: 'inherit' }}>Login</Link>
+                    </Button>
                 )}
             </Toolbar>
         </AppBar>
     );
-}
+};
 
 export default Navbar;

@@ -1,35 +1,23 @@
 import axios from 'axios';
-import { LOGIN_USER, LOGIN_FAIL, SET_USER, LOGOUT_USER } from '../reducers/authReducer'
 
-const API_URL = process.env.REACT_APP_API_URL;
 
 export const loginUser = (username, password) => async dispatch => {
   try {
-    const response = await axios.post(`${API_URL}/auth/login`, {
-      username,
-      password
+    const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, { username, password });
+    dispatch({
+      type: 'LOGIN_SUCCESS',
+      payload: response.data.user
     });
-
-    const { data } = response;
-    localStorage.setItem('token', data.token);
-
-    // Dispatch the LOGIN_USER action with both token and user data
-    dispatch({ type: LOGIN_USER, payload: { token: data.token, user: data.user }});
   } catch (error) {
-    dispatch({ type: LOGIN_FAIL });
+    dispatch({
+      type: 'LOGIN_FAILURE',
+      payload: error.response ? error.response.data : 'Login failed'
+    });
   }
 };
 
-export const logoutUser = () => {
-  localStorage.removeItem('token'); // Remove token from local storage
-  return {
-    type: LOGOUT_USER
-  };
-};
-
-export const setUser = (userData) => {
-  return {
-      type: SET_USER,
-      payload: userData
-  };
+export const logoutUser = () => dispatch => {
+  dispatch({
+    type: 'LOGOUT'
+  });
 };
