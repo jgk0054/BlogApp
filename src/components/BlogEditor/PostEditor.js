@@ -69,7 +69,7 @@ const PostEditor = () => {
 
             if (response.status === 200 || response.status === 201) {
                 console.log("Post operation successful:", response.data);
-                window.location.href = `${API_URL}/blogs/${response.data.id}`; // Redirect to the post view
+                window.location.href = `${window.location.origin}/post/${response.data.id}`;
             } else {
                 setError("Unexpected response from the server. Please try again.");
             }
